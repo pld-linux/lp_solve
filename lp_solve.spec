@@ -2,7 +2,7 @@ Summary:	Library and tool that solves linear programming problem
 Summary(pl):	Biblioteka i narzêdzie do rozwi±zywania problemu programowania liniowego
 Name:		lp_solve
 Version:	4.0
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	ftp://ftp.ics.ele.tue.nl/pub/lp_solve/%{name}_%{version}.tar.gz
@@ -52,13 +52,15 @@ Statyczna biblioteka liblpk.
 %build
 %{__make} \
 	CC="%{__cc}" \
-	OPT="%{rpmcflags}"
+	OPT="%{rpmcflags}" \
+	libdir=%{_libdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	libdir=%{_libdir}
 
 rm -f lp_examples/*.{out,mps}
 
