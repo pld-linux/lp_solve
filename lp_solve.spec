@@ -1,14 +1,13 @@
 Summary:	Library and tool that solves linear programming problem
 Summary(pl):	Biblioteka i narzêdzie do rozwi±zywania problemu programowania liniowego
 Name:		lp_solve
-Version:	3.2
-Release:	2
+Version:	4.0
+Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	ftp://ftp.ics.ele.tue.nl/pub/lp_solve/%{name}_%{version}.tar.gz
-# Source0-md5:	91b1a8281dfd18bcd2e1c844a39b5df3
+# Source0-md5:	58892f708d7f78664bce80c1ebc250f9
 Patch0:		%{name}-shared.patch
-Patch1:		%{name}-yyparse.patch
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libtool
@@ -49,17 +48,16 @@ Statyczna biblioteka liblpk.
 %prep
 %setup -q -n %{name}_%{version}
 %patch0 -p1
-%patch1 -p1
 
 %build
-%{__make} -f Makefile.linux \
+%{__make} \
 	CC="%{__cc}" \
 	OPT="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install -f Makefile.linux \
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f lp_examples/*.{out,mps}
@@ -79,7 +77,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc HARTMUT_DOCUMENTATION lp_examples
+%doc HARTMUT_DOCUMENTATION SOSInterpolation.pdf lp_examples
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_includedir}/*
