@@ -6,6 +6,7 @@ Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	ftp://ftp.ics.ele.tue.nl/pub/lp_solve/%{name}_%{version}.tar.gz
+# Source0-md5:	91b1a8281dfd18bcd2e1c844a39b5df3
 Patch0:		%{name}-shared.patch
 Patch1:		%{name}-yyparse.patch
 BuildRequires:	bison
