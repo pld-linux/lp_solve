@@ -25,7 +25,7 @@ liniowego przy u¿yciu algorytmu Simplex.
 Summary:	liblpk header files
 Summary(pl):	Pliki nag³ówkowe biblioteki liblpk
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 liblpk header files.
@@ -37,7 +37,7 @@ Pliki nag³ówkowe biblioteki liblpk.
 Summary:	Static liblpk library
 Summary(pl):	Statyczna biblioteka liblpk
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static liblpk library.
