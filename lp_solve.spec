@@ -2,11 +2,12 @@ Summary:	Library and tool that solves linear programming problem
 Summary(pl):	Biblioteka i narzêdzie do rozwi±zywania problemu programowania liniowego
 Name:		lp_solve
 Version:	3.2
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	ftp://ftp.ics.ele.tue.nl/pub/lp_solve/%{name}_%{version}.tar.gz
 Patch0:		%{name}-shared.patch
+Patch1:		%{name}-yyparse.patch
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libtool
@@ -46,7 +47,8 @@ Statyczna biblioteka liblpk.
 
 %prep
 %setup -q -n %{name}_%{version}
-%patch -p1
+%patch0 -p1
+%patch1 -p1
 
 %build
 %{__make} -f Makefile.linux \
