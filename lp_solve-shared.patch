@@ -1,5 +1,5 @@
---- lp_solve_3.2/Makefile.linux.orig	Tue Jan 16 11:29:13 2001
-+++ lp_solve_3.2/Makefile.linux	Sun Dec  8 20:01:47 2002
+--- lp_solve_4.0/Makefile.orig	Sun Nov 17 23:37:03 2002
++++ lp_solve_4.0/Makefile	Sun Dec  8 14:26:57 2002
 @@ -9,7 +9,7 @@
  #CFLAGS= -g -Aa -D_POSIX_SOURCE -DCHECK +FP VZOUiD
  
@@ -9,7 +9,7 @@
  #CFLAGS= -g -Wall -pedantic -ansi
  
  # Option -DCHECK checks for numerical problems during rounding of numbers.
-@@ -41,48 +41,56 @@
+@@ -41,6 +41,12 @@
  #non-ANSI math lib, should also work
  MATHLIB= -lm
  
@@ -22,7 +22,8 @@
  LPKSRC.c= lpkit.c solve.c debug.c read.c readmps.c hash.c presolve.c
  LEXFILE.l= lex.l
  YACCFILE.y= lp.y
- TESTFILES= lp_examples/ex1.lp lp_examples/ex2.lp lp_examples/ex3.lp lp_examples/ex4.lp lp_examples/ex5.lp lp_examples/ex6.lp lp_examples/ex7.lp
+@@ -48,42 +54,44 @@
+ TESTFILES2= lp_examples/*.mps
  
  TARGET=lp_solve
 -LPKLIB=liblpk.a
@@ -38,7 +39,7 @@
  LPKSRC= $(LPKSRC.c) $(YACCFILE.c)
 -LPKOBJ= $(LPKSRC:.c=.o)
 +LPKOBJ= $(LPKSRC:.c=.lo)
- HEADERS=lpkit.h lpglob.h patchlevel.h debug.h read.h hash.h
+ HEADERS=lpkit.h lpglob.h patchlevel.h debug.h read.h hash.h declare.h ufortify.h fortify.h
  
  all:	demo $(TARGET) lp2mps mps2lp
  
@@ -78,7 +79,7 @@
  
  $(YACCFILE.o): $(LEXFILE.c)
  
-@@ -119,3 +127,12 @@
+@@ -136,3 +144,12 @@
  
  TAGS:
  	etags *.[chyl]
@@ -91,3 +92,41 @@
 +	libtool install mps2lp $(DESTDIR)$(bindir)
 +	install $(HEADERS) $(DESTDIR)$(includedir)
 +	install $(TARGET).1 $(DESTDIR)$(mandir)/man1
+--- lp_solve_4.0/lpkit.h.orig	Sat Nov 16 21:25:50 2002
++++ lp_solve_4.0/lpkit.h	Sun Dec  8 16:50:22 2002
+@@ -840,12 +840,7 @@
+ short SOS_is_satisfied(lprec *lp, int sosindex, REAL *solution);
+ MYBOOL SOS_can_mark(lprec *lp, int sosindex, int column);
+ 
+-/* define yyparse() to make compilers happy. There should be some system
+-   include file for this */
+-int yyparse(void);
+-void yyerror(char *);
+ void check_decl(int);
+-int yywrap();
+ 
+ #ifdef __cplusplus
+ };
+--- lp_solve_4.0/lp.y.orig	Sun Sep 29 23:21:28 2002
++++ lp_solve_4.0/lp.y	Sun Dec  8 16:53:00 2002
+@@ -13,6 +13,9 @@
+ #include "lpglob.h"
+ #include "read.h"
+ 
++void yyerror(char *);
++int yywrap();
++
+ /* globals */
+ char Last_var[NAMELEN];
+ int Lin_term_count;
+--- lp_solve_4.0/read.c.orig	Sun Nov 17 23:36:04 2002
++++ lp_solve_4.0/read.c	Sun Dec  8 16:53:53 2002
+@@ -35,6 +35,8 @@
+ #include "lpkit.h"
+ #include "lpglob.h"
+ 
++int yyparse(void);
++
+ short            *relat;
+ int              Verbose;
+ constraint_name  *First_constraint_name;
