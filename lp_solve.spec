@@ -12,7 +12,7 @@ Group:		Libraries
 Source0:	http://dl.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
 # Source0-md5:	26b3e95ddf3d9c077c480ea45874b3b8
 Patch0:		%{name}-shared.patch
-URL:		http://sourceforge.net/projects/lpsolve/
+URL:		http://lpsolve.sourceforge.net/5.5/
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libtool
