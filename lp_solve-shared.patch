@@ -20,11 +20,12 @@
  
  $c -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
  ar rv liblpsolve55.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
---- lp_solve_5.5/lp_solve/ccc	2007-03-26 23:50:49.381260934 +0300
-+++ lp_solve_5.5/lp_solve/ccc	2007-03-27 00:10:11.387403126 +0300
+--- lp_solve_5.5/lp_solve/ccc	2007-03-27 00:10:11.387403126 +0300
++++ lp_solve_5.5/lp_solve/ccc	2007-03-27 00:50:12.501214911 +0300
 @@ -1,9 +1,9 @@
- src='../lp_MDO.c ../shared/commonlib.c ../colamd/colamd.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c lp_solve.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
+-src='../lp_MDO.c ../shared/commonlib.c ../colamd/colamd.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c lp_solve.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
 -c=cc
++src='lp_solve.c'
 +c=${CC:-cc}
  
  math=-lm
@@ -34,3 +35,6 @@
  
  def=
  if [ "$PLATFORM" = "SCO_UNIX" ]
+@@ -17 +17 @@
+-$c -I.. -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I../shared $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src -o lp_solve $math $dl
++$c -I.. -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I../shared $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src -o lp_solve $math $dl -L../lpsolve55 -llpsolve55 -Wl,-rpath=/usr/lib/lp_solve
