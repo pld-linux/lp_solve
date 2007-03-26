@@ -1,68 +1,74 @@
-Summary:	Library and tool that solves linear programming problem
+# TODO
+# - update -pl
+%define		_ver_major	5.5
+%define		_ver_minor	0.10
+Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
-Version:	4.0
-Release:	2
+Version:	%{_ver_major}.%{_ver_minor}
+Release:	0.1
 License:	LGPL
 Group:		Libraries
-Source0:	ftp://ftp.ics.ele.tue.nl/pub/lp_solve/%{name}_%{version}.tar.gz
-# Source0-md5:	58892f708d7f78664bce80c1ebc250f9
+Source0:	http://dl.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
+# Source0-md5:	26b3e95ddf3d9c077c480ea45874b3b8
 Patch0:		%{name}-shared.patch
+URL:		http://sourceforge.net/projects/lpsolve/
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Library and tool that solves linear programming problem using Simplex
-algorithm.
+Mixed Integer Linear Programming (MILP) solver lp_solve solves pure
+linear, (mixed) integer/binary, semi-continuous and special ordered
+sets (SOS) models.
 
 %description -l pl.UTF-8
 Biblioteka i narzędzie do rozwiązywania problemu programowania
 liniowego przy użyciu algorytmu Simplex.
 
 %package devel
-Summary:	liblpk header files
-Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki liblpk
+Summary:	liblpsolve header files
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki liblpsolve
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
-liblpk header files.
+liblpsolve header files.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe biblioteki liblpk.
+Pliki nagłówkowe biblioteki liblpsolve.
 
 %package static
-Summary:	Static liblpk library
-Summary(pl.UTF-8):	Statyczna biblioteka liblpk
+Summary:	Static liblpsolve library
+Summary(pl.UTF-8):	Statyczna biblioteka liblpsolve
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static liblpk library.
+Static liblpsolve library.
 
 %description static -l pl.UTF-8
-Statyczna biblioteka liblpk.
+Statyczna biblioteka liblpsolve.
 
 %prep
-%setup -q -n %{name}_%{version}
+%setup -q -n %{name}_%{_ver_major}
 %patch0 -p1
 
 %build
-%{__make} \
-	CC="%{__cc}" \
-	OPT="%{rpmcflags}" \
-	libdir=%{_libdir}
+cd lpsolve55
+CC="%{__cc}" CFLAGS="%{rpmcflags}" sh -x ccc
+cd ../lp_solve
+CC="%{__cc}" CFLAGS="%{rpmcflags}" sh -x ccc
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/lpsolve}
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	libdir=%{_libdir}
-
-rm -f lp_examples/*.{out,mps}
+install lp_solve/lp_solve $RPM_BUILD_ROOT%{_bindir}/lpsolve
+install lpsolve55/liblpsolve55.a $RPM_BUILD_ROOT%{_libdir}/liblpsolve.a
+install lpsolve55/liblpsolve55.so $RPM_BUILD_ROOT%{_libdir}/liblpsolve.so
+cp -a lp*.h $RPM_BUILD_ROOT%{_includedir}/lpsolve
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -72,18 +78,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGELOG MIPLIB_RESULTS MPS.description NETLIB_RESULTS README
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
-%{_mandir}/man1/*
+%doc README.txt
+%attr(755,root,root) %{_bindir}/lpsolve
+%attr(755,root,root) %{_libdir}/liblpsolve.so
 
 %files devel
 %defattr(644,root,root,755)
-%doc HARTMUT_DOCUMENTATION SOSInterpolation.pdf lp_examples
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
-%{_includedir}/*
+%{_includedir}/lpsolve
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/liblpsolve.a
