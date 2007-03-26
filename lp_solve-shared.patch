@@ -1,132 +1,36 @@
---- lp_solve_4.0/Makefile.orig	Sun Nov 17 23:37:03 2002
-+++ lp_solve_4.0/Makefile	Sun Dec  8 14:26:57 2002
-@@ -9,7 +9,7 @@
- #CFLAGS= -g -Aa -D_POSIX_SOURCE -DCHECK +FP VZOUiD
+--- lp_solve_5.5/lpsolve55/ccc	2007-03-26 23:50:26.340742050 +0300
++++ lp_solve_5.5/lpsolve55/ccc	2007-03-27 00:13:26.141765888 +0300
+@@ -1,8 +1,8 @@
+ src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
+-c=cc
++c=${CC:-cc}
  
- # nice for gcc
--CFLAGS= -O3 -Wall -pedantic -ansi
-+CFLAGS= $(OPT) -Wall -pedantic -ansi
- #CFLAGS= -g -Wall -pedantic -ansi
+ def=
+-so=
++so=y
+ if [ "$PLATFORM" = "SCO_UNIX" ]
+ then def='-dy -K PIC -DNOLONGLONG'
+      dl=-lc
+@@ -10,7 +10,7 @@
+      so=y
+ fi
  
- # Option -DCHECK checks for numerical problems during rounding of numbers.
-@@ -41,6 +41,12 @@
- #non-ANSI math lib, should also work
- MATHLIB= -lm
+-opts='-O3'
++opts=${CFLAGS:--O3}
  
-+prefix = /usr
-+bindir = $(prefix)/bin
-+libdir = $(prefix)/lib
-+includedir = $(prefix)/include/lp_solve
-+mandir = $(prefix)/share/man
-+
- LPKSRC.c= lpkit.c solve.c debug.c read.c readmps.c hash.c presolve.c
- LEXFILE.l= lex.l
- YACCFILE.y= lp.y
-@@ -48,42 +54,44 @@
- TESTFILES2= lp_examples/*.mps
+ $c -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
+ ar rv liblpsolve55.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+--- lp_solve_5.5/lp_solve/ccc	2007-03-26 23:50:49.381260934 +0300
++++ lp_solve_5.5/lp_solve/ccc	2007-03-27 00:10:11.387403126 +0300
+@@ -1,9 +1,9 @@
+ src='../lp_MDO.c ../shared/commonlib.c ../colamd/colamd.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c lp_solve.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
+-c=cc
++c=${CC:-cc}
  
- TARGET=lp_solve
--LPKLIB=liblpk.a
-+LPKLIB=liblpk.la
+ math=-lm
  
- LEXFILE.c= $(LEXFILE.l:.l=.c)
- YACCFILE.c= $(YACCFILE.y:.y=.c)
--YACCFILE.o= $(YACCFILE.y:.y=.o)
-+YACCFILE.o= $(YACCFILE.y:.y=.lo)
- CSOURCES=lpkit.c solve.c debug.c read.c readmps.c lp_solve.c demo.c hash.c presolve.c $(LEXFILE.c) $(YACCFILE.c)
--COBJ=$(CSOURCES:.c=.o)
-+COBJ=$(CSOURCES:.c=.lo)
- LPKSRC= $(LPKSRC.c) $(YACCFILE.c)
--LPKOBJ= $(LPKSRC:.c=.o)
-+LPKOBJ= $(LPKSRC:.c=.lo)
- HEADERS=lpkit.h lpglob.h patchlevel.h debug.h read.h hash.h declare.h ufortify.h fortify.h
+-opts='-O3'
++opts=${CFLAGS:--O3}
  
- all:	demo $(TARGET) lp2mps mps2lp
- 
- $(COBJ): $(HEADERS)
- 
-+%.lo: %.c
-+	libtool --mode=compile $(CC) $(CFLAGS) -c $< -o $@
-+
- demo:	demo.o $(LPKLIB)
--	$(CC) -o demo $(CFLAGS) demo.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	libtool --mode=link $(CC) -o demo $(CFLAGS) demo.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- lp2mps:	lp2mps.o $(LPKLIB)
--	$(CC) -o lp2mps $(CFLAGS) lp2mps.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	libtool --mode=link $(CC) -o lp2mps $(CFLAGS) lp2mps.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- mps2lp: mps2lp.o $(LPKLIB)
--	$(CC) -o mps2lp $(CFLAGS) mps2lp.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	libtool --mode=link $(CC) -o mps2lp $(CFLAGS) mps2lp.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- $(TARGET): lp_solve.o $(LPKLIB)
--	$(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	libtool --mode=link $(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- purify: lp_solve.o $(LPKLIB)
--	purify $(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	purify libtool --mode=link $(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- quantify: lp_solve.o $(LPKLIB)
--	quantify $(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
-+	quantify libtool --mode=link $(CC) -o $(TARGET) $(CFLAGS) lp_solve.o $(LPKLIB) $(LEXLIB) $(MATHLIB)
- 
- $(LPKLIB): $(LPKOBJ)
--	ar rv $@ $(LPKOBJ)
--	ranlib $(LPKLIB)
-+	libtool --mode=link $(CC) -o $(LPKLIB) $(LPKOBJ) -rpath $(libdir)
- 
- $(YACCFILE.o): $(LEXFILE.c)
- 
-@@ -136,3 +144,12 @@
- 
- TAGS:
- 	etags *.[chyl]
-+
-+install: all
-+	install -d $(DESTDIR)$(libdir) $(DESTDIR)$(includedir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(bindir)
-+	libtool --mode=install install $(LPKLIB) $(DESTDIR)$(libdir)
-+	libtool --mode=install install $(TARGET) $(DESTDIR)$(bindir)
-+	libtool --mode=install install lp2mps $(DESTDIR)$(bindir)
-+	libtool --mode=install install mps2lp $(DESTDIR)$(bindir)
-+	install $(HEADERS) $(DESTDIR)$(includedir)
-+	install $(TARGET).1 $(DESTDIR)$(mandir)/man1
---- lp_solve_4.0/lpkit.h.orig	Sat Nov 16 21:25:50 2002
-+++ lp_solve_4.0/lpkit.h	Sun Dec  8 16:50:22 2002
-@@ -840,12 +840,7 @@
- short SOS_is_satisfied(lprec *lp, int sosindex, REAL *solution);
- MYBOOL SOS_can_mark(lprec *lp, int sosindex, int column);
- 
--/* define yyparse() to make compilers happy. There should be some system
--   include file for this */
--int yyparse(void);
--void yyerror(char *);
- void check_decl(int);
--int yywrap();
- 
- #ifdef __cplusplus
- };
---- lp_solve_4.0/lp.y.orig	Sun Sep 29 23:21:28 2002
-+++ lp_solve_4.0/lp.y	Sun Dec  8 16:53:00 2002
-@@ -13,6 +13,9 @@
- #include "lpglob.h"
- #include "read.h"
- 
-+void yyerror(char *);
-+int yywrap();
-+
- /* globals */
- char Last_var[NAMELEN];
- int Lin_term_count;
---- lp_solve_4.0/read.c.orig	Sun Nov 17 23:36:04 2002
-+++ lp_solve_4.0/read.c	Sun Dec  8 16:53:53 2002
-@@ -35,6 +35,8 @@
- #include "lpkit.h"
- #include "lpglob.h"
- 
-+int yyparse(void);
-+
- short            *relat;
- int              Verbose;
- constraint_name  *First_constraint_name;
+ def=
+ if [ "$PLATFORM" = "SCO_UNIX" ]
