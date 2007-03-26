@@ -6,7 +6,7 @@ Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
 Version:	%{_ver_major}.%{_ver_minor}
-Release:	0.3
+Release:	0.4
 License:	LGPL
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
@@ -15,6 +15,7 @@ Patch0:		%{name}-shared.patch
 URL:		http://lpsolve.sourceforge.net/5.5/
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	colamd-devel
 BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,6 +72,8 @@ Statyczna biblioteka liblpsolve.
 %prep
 %setup -q -n %{name}_%{_ver_major}
 %patch0 -p1
+
+rm -rf colamd
 
 %build
 cd lpsolve55
