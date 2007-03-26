@@ -6,7 +6,7 @@ Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
 Version:	%{_ver_major}.%{_ver_minor}
-Release:	0.1
+Release:	0.3
 License:	LGPL
 Group:		Libraries
 Source0:	http://dl.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
@@ -19,9 +19,26 @@ BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Mixed Integer Linear Programming (MILP) solver lp_solve solves pure
-linear, (mixed) integer/binary, semi-continuous and special ordered
-sets (SOS) models.
+The linear programming (LP) problem can be formulated as: Solve A.x >=
+V1, with V2.x maximal. A is a matrix, x is a vector of (nonnegative)
+variables, V1 is a vector called the right hand side, and V2 is a
+vector specifying the objective function.
+
+An integer linear programming (ILP) problem is an LP with the
+constraint that all the variables are integers. In a mixed integer
+linear programming (MILP) problem, some of the variables are integer
+and others are real.
+
+The program lp_solve solves LP, ILP, and MILP problems. It is slightly
+more general than suggested above, in that every row of A (specifying
+one constraint) can have its own (in)equality, <=, >= or =. The result
+specifies values for all variables.
+
+lp_solve uses the 'Simplex' algorithm and sparse matrix methods for
+pure LP problems. If one or more of the variables is declared integer,
+the Simplex algorithm is iterated with a branch and bound algorithm,
+until the desired optimal solution is found. lp_solve can read MPS
+format input files.
 
 %description -l pl.UTF-8
 Biblioteka i narzędzie do rozwiązywania problemu programowania
