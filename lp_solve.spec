@@ -1,5 +1,3 @@
-# TODO
-# - update -pl
 %define		_ver_major	5.5
 %define		_ver_minor	0.10
 Summary:	Mixed Integer Linear Program solver
