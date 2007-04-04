@@ -42,8 +42,26 @@ until the desired optimal solution is found. lp_solve can read MPS
 format input files.
 
 %description -l pl.UTF-8
-Biblioteka i narzędzie do rozwiązywania problemu programowania
-liniowego przy użyciu algorytmu Simplex.
+Problem programowania liniowego (LP - Linear Programming) można
+określić następująco: rozwiązać A.x >= V1 z maksymalnym V2.x. A jest
+macierzą. x jest wektorem (nieujemnych) zmiennych, V1 jest wektorem
+zwanym prawą stroną, a V2 jest wektorem określającym funkcję celu.
+
+Problem całkowitoliczbowego programowania liniowego (ILP - Integer LP)
+LP z ograniczeniem zmiennych do liczb całkowitych. Problem mieszanego
+całkowitoliczbowego programowania liniowego (MILP - Mixed ILP) dotyczy
+sytuacji kiedy część zmiennych jest całkowita, a reszta rzeczywista.
+
+Program lp_solve rozwiązuje problemy LP, ILP i MILP. Jest nieco
+bardziej ogólny niż napisano powyżej, ponieważ każdy wiersz A
+(określający jedno ograniczenie) może mieć własną (nie)równość: <=, >=
+lub =. Wynik określa wartości wszystkich zmiennych.
+
+lp_solve używa algorytmu "Simplex" i metod dla macierzy rzadkich do
+zwykłych problemów LP. Jeśli jedna lub więcej zmiennych zostanie
+określona jako całkowita, algorytm Simplex jest iterowany algorytmem
+"branch and bound" do osiągnięcia pożądanego optymalnego rozwiązania.
+lp_solve potrafi czytać pliki wejściowe w formacie MPS.
 
 %package devel
 Summary:	liblpsolve header files
