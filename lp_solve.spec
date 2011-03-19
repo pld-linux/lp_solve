@@ -1,19 +1,19 @@
 %define		_ver_major	5.5
-%define		_ver_minor	0.10
+%define		_ver_minor	2.0
 Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
 Version:	%{_ver_major}.%{_ver_minor}
-Release:	0.4
+Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
-# Source0-md5:	26b3e95ddf3d9c077c480ea45874b3b8
+Source0:	http://downloads.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
+# Source0-md5:	167c0fb4ab178e0b7ab50bf0a635a836
 Patch0:		%{name}-shared.patch
 URL:		http://lpsolve.sourceforge.net/5.5/
+BuildRequires:	COLAMD-devel
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	colamd-devel
 BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -89,21 +89,22 @@ Statyczna biblioteka liblpsolve.
 %setup -q -n %{name}_%{_ver_major}
 %patch0 -p1
 
-rm -rf colamd
+%{__rm} -r colamd
 
 %build
 cd lpsolve55
-CC="%{__cc}" CFLAGS="%{rpmcflags}" sh -x ccc
+CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd" sh -x ccc
 cd ../lp_solve
-CC="%{__cc}" CFLAGS="%{rpmcflags}" sh -x ccc
+CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd" sh -x ccc
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/lpsolve}
 
-install lp_solve/lp_solve $RPM_BUILD_ROOT%{_bindir}/lpsolve
-install lpsolve55/liblpsolve55.a $RPM_BUILD_ROOT%{_libdir}/liblpsolve.a
-install lpsolve55/liblpsolve55.so $RPM_BUILD_ROOT%{_libdir}/liblpsolve.so
+install lp_solve/bin/ux*/lp_solve $RPM_BUILD_ROOT%{_bindir}/lpsolve
+install lpsolve55/bin/ux*/liblpsolve55.a $RPM_BUILD_ROOT%{_libdir}/liblpsolve.a
+install lpsolve55/bin/ux*/liblpsolve55.so $RPM_BUILD_ROOT%{_libdir}
+ln -sf liblpsolve55.so $RPM_BUILD_ROOT%{_libdir}/liblpsolve.so
 cp -a lp*.h $RPM_BUILD_ROOT%{_includedir}/lpsolve
 
 %clean
@@ -116,10 +117,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.txt
 %attr(755,root,root) %{_bindir}/lpsolve
-%attr(755,root,root) %{_libdir}/liblpsolve.so
+%attr(755,root,root) %{_libdir}/liblpsolve55.so
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/liblpsolve.so
 %{_includedir}/lpsolve
 
 %files static
