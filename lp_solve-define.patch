@@ -1,0 +1,32 @@
+--- lp_solve_5.5/shared/commonlib.h.orig	2016-05-10 22:09:37.933715163 +0200
++++ lp_solve_5.5/shared/commonlib.h	2016-05-10 22:10:56.710378524 +0200
+@@ -84,7 +84,8 @@
+   #define NULL 	       0
+ #endif
+ 
+-#ifndef FALSE
++#if 0
++/* defined in lp_types.h */
+   #define FALSE        0
+   #define TRUE         1
+ #endif
+--- lp_solve_5.5/shared/commonlib.c.orig	2016-05-06 11:25:24.000000000 +0200
++++ lp_solve_5.5/shared/commonlib.c	2016-05-10 22:16:43.280363979 +0200
+@@ -19,6 +19,7 @@
+ #include <float.h>
+ #include <math.h>
+ #include "commonlib.h"
++#include "lp_types.h"
+ 
+ #ifdef FORTIFY
+ # include "lp_fortify.h"
+--- lp_solve_5.5/shared/myblas.c.orig	2016-05-06 11:25:24.000000000 +0200
++++ lp_solve_5.5/shared/myblas.c	2016-05-10 22:18:31.380359443 +0200
+@@ -4,6 +4,7 @@
+ /*#include <memory.h>*/
+ #include <string.h>
+ #include <math.h>
++#include "lp_types.h"
+ #include "myblas.h"
+ 
+ #ifdef FORTIFY
