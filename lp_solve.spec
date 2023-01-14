@@ -4,7 +4,7 @@ Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
 Version:	%{_ver_major}.%{_ver_minor}
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
