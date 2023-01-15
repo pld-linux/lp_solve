@@ -1,21 +1,20 @@
-%define		_ver_major	5.5
-%define		_ver_minor	2.5
+%define		ver_major	5.5
+%define		ver_minor	2.11
 Summary:	Mixed Integer Linear Program solver
 Summary(pl.UTF-8):	Biblioteka i narzędzie do rozwiązywania problemu programowania liniowego
 Name:		lp_solve
-Version:	%{_ver_major}.%{_ver_minor}
-Release:	3
+Version:	%{ver_major}.%{ver_minor}
+Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/lpsolve/%{name}_%{version}_source.tar.gz
-# Source0-md5:	3be57261fc41dd8e210f54017220d5f7
+# Source0-md5:	a829a8d9c60ff81dc72ff52363703886
 Patch0:		%{name}-shared.patch
 Patch1:		%{name}-define.patch
 URL:		http://lpsolve.sourceforge.net/5.5/
-BuildRequires:	COLAMD-devel
+BuildRequires:	SuiteSparse-COLAMD-devel
 BuildRequires:	bison
 BuildRequires:	flex
-BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -87,7 +86,7 @@ Static liblpsolve library.
 Statyczna biblioteka liblpsolve.
 
 %prep
-%setup -q -n %{name}_%{_ver_major}
+%setup -q -n %{name}_%{ver_major}
 %patch0 -p1
 %patch1 -p1
 
@@ -95,9 +94,15 @@ Statyczna biblioteka liblpsolve.
 
 %build
 cd lpsolve55
-CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd -I/usr/include/suitesparse" sh -x ccc
+CC="%{__cc}" \
+CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/suitesparse" \
+LDFLAGS="%{rpmcppflags}" \
+sh -x ccc
 cd ../lp_solve
-CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd -I/usr/include/suitesparse" sh -x ccc
+CC="%{__cc}" \
+CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/suitesparse" \
+LDFLAGS="%{rpmcppflags}" \
+sh -x ccc
 
 %install
 rm -rf $RPM_BUILD_ROOT
