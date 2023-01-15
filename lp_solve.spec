@@ -95,9 +95,9 @@ Statyczna biblioteka liblpsolve.
 
 %build
 cd lpsolve55
-CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd" sh -x ccc
+CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd -I/usr/include/suitesparse" sh -x ccc
 cd ../lp_solve
-CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd" sh -x ccc
+CC="%{__cc}" CFLAGS="%{rpmcflags} %{rpmcppflags} -I/usr/include/colamd -I/usr/include/suitesparse" sh -x ccc
 
 %install
 rm -rf $RPM_BUILD_ROOT
