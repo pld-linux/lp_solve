@@ -87,8 +87,8 @@ Statyczna biblioteka liblpsolve.
 
 %prep
 %setup -q -n %{name}_%{ver_major}
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %{__rm} -r colamd
 
