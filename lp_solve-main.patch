@@ -1,0 +1,40 @@
+--- lp_solve_5.5/lpsolve55/ccc.orig	2025-07-01 05:31:20.232630046 +0200
++++ lp_solve_5.5/lpsolve55/ccc	2025-07-01 05:35:10.613951300 +0200
+@@ -8,7 +8,7 @@ MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_so
+ >"$MYTMP"/platform.c
+ echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+ echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+-echo 'main(){printf("ux%d", (int) (sizeof(void *)*8));}'>>"$MYTMP"/platform.c
++echo 'int main(){printf("ux%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+ $c "$MYTMP"/platform.c -o "$MYTMP"/platform
+ PLATFORM=`"$MYTMP"/platform`
+ rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+@@ -20,7 +20,7 @@ mkdir bin bin/$PLATFORM >/dev/null 2>&1
+ echo '#include <stdio.h>'>>"$MYTMP"/isnan.c
+ echo '#include <stdlib.h>'>>"$MYTMP"/isnan.c
+ echo '#include <math.h>'>>"$MYTMP"/isnan.c
+-echo 'main(){isnan(0.0);return 0;}'>>"$MYTMP"/isnan.c
++echo 'int main(){isnan(0.0);return 0;}'>>"$MYTMP"/isnan.c
+ $c "$MYTMP"/isnan.c -o "$MYTMP"/isnan $math >/dev/null 2>&1
+ if [ $? = 0 ]
+ then NOISNAN=
+--- lp_solve_5.5/lp_solve/ccc.orig	2025-07-01 05:31:20.232630046 +0200
++++ lp_solve_5.5/lp_solve/ccc	2025-07-01 05:35:34.800756680 +0200
+@@ -8,7 +8,7 @@ MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_so
+ >"$MYTMP"/platform.c
+ echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+ echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+-echo 'main(){printf("ux%d", (int) (sizeof(void *)*8));}'>>"$MYTMP"/platform.c
++echo 'int main(){printf("ux%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+ $c "$MYTMP"/platform.c -o "$MYTMP"/platform
+ PLATFORM=`"$MYTMP"/platform`
+ rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+@@ -22,7 +22,7 @@ math=-lm
+ echo '#include <stdio.h>'>>"$MYTMP"/isnan.c
+ echo '#include <stdlib.h>'>>"$MYTMP"/isnan.c
+ echo '#include <math.h>'>>"$MYTMP"/isnan.c
+-echo 'main(){isnan(0.0);return 0;}'>>"$MYTMP"/isnan.c
++echo 'int main(){isnan(0.0);return 0;}'>>"$MYTMP"/isnan.c
+ $c "$MYTMP"/isnan.c -o "$MYTMP"/isnan $math >/dev/null 2>&1
+ if [ $? = 0 ]
+ then NOISNAN=
